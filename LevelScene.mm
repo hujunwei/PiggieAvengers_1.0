@@ -11,6 +11,10 @@
 #import "StartScene.h"
 #import "cocos2d.h"
 #import "GameScene.h"
+
+#define BIRD_CHARACTER 200
+#define PIG_CHARACTER 300
+#define TITLE_TAG 400
 @implementation LevelScene
 
 + (id)scene
@@ -32,48 +36,94 @@
         //[levelSceneBG setScale:0.7f];
         [levelSceneBG setPosition:ccp(winSize.width/2.0f, winSize.height/2.0f)];
         [self addChild:levelSceneBG];
-
         CCSprite* backButton = [CCSprite spriteWithFile:@"backarrow.png"];
         [backButton setPosition:ccp(40.0f, 40.0f)];
         [backButton setScale:0.5f];
         [backButton setTag:100];
         [self addChild:backButton];
+        CCSprite* birdCharacter = [CCSprite spriteWithFile:@"angrybirds3d.png"];
+        [birdCharacter setPosition:ccp(winSize.width / 3 - 20.0, winSize.height / 2.5)];
+        [birdCharacter setScale:0.6f];
+        [birdCharacter setTag:BIRD_CHARACTER];
+        [self addChild:birdCharacter];
+        CCSprite* pigCharacter = [CCSprite spriteWithFile:@"pig.png"];
+        [pigCharacter setPosition:ccp(winSize.width / 3 * 2 + 20.0, winSize.height / 2.5)];
+        [pigCharacter setScale:1.5f];
+        [pigCharacter setTag:PIG_CHARACTER];
+        [self addChild:pigCharacter];
+        //CCSprite* levelSceneTitle = [CCSprite spriteWithFile:@"levelSceneTitle.png"];
+        CCLabelTTF* levelSceneTitle = [CCLabelTTF labelWithString:@"Select Your Character" fontName:@"Scissor Cuts.ttf" fontSize:40.0f];
+        [levelSceneTitle setColor:ccc3(255, 255, 0)];
+        [levelSceneTitle setPosition:ccp(winSize.width / 2 + 10, winSize.height - 80)];
+        [levelSceneTitle setTag:TITLE_TAG];
+        CCScaleBy* actionScaleBigger = [CCScaleBy actionWithDuration:1.5f scale:1.5f];
+        CCScaleBy* actionScaleSmaller = [CCScaleBy actionWithDuration:1.5f scale:0.67f];
+        CCSequence* allActions = [CCSequence actions:actionScaleBigger, actionScaleSmaller, nil];
+        CCRepeat* repeatActions = [CCRepeat actionWithAction:allActions times:4];
+        [self addChild:levelSceneTitle];
+        [levelSceneTitle runAction:repeatActions];
         
-        //加上14关
-        successlevel = [GameUtil readLevelFromFile];
-        NSString* imgPath = nil;
-        for (int i = 0; i < 14; i++) {
-            if (i < successlevel) {
-                //已经通关了的
-                imgPath = @"level.png";
-                NSString* str = [NSString stringWithFormat:@"%d", i+1];
-                //CCLabelTTF* numLabel = [CCLabelTTF labelWithString:str dimensions:CGSizeMake(60.0f, 60.0f) alignment: UITextAlignmentCenter fontName:@"Marker Flet" fontSize:30.0f];
-                //CCLabelTTF* numLabel = [CCLabelTTF labelWithString:str fontName:@"Marker Flet" fontSize:30.0f];
-                CCLabelTTF *numLabel = [CCLabelTTF labelWithString:str dimensions:CGSizeMake(60.0f, 60.0f) alignment:UITextAlignmentCenter fontName:@"Marker Felt" fontSize:30.0f];
-                float x = 60 + i % 7 * 60;
-                float y = 320 - 75 -i / 7 * 80;
-                [numLabel setPosition:ccp(x, y)];
-                [self addChild:numLabel z:2];
-            }
-            else {
-                //加锁的关卡
-                imgPath = @"clock.png";
-            }
-            CCSprite* levelSprite = [CCSprite spriteWithFile:imgPath];
-            [levelSprite setTag:i+1];
-            float x = 60 + i % 7 * 60;
-            float y = 320 - 60 -i / 7 * 80;
-            [levelSprite setPosition:ccp(x, y)];
-            [levelSprite setScale:0.6f];
-            [self addChild:levelSprite z:1];
-        }
-    
-
     }
     return self;
 }
 
 //触摸结束的时候
+
+-(void)ccTouchesBegan:(NSSet *)touches withEvent:(UIEvent *)event
+{
+    //get touch point
+    CGSize winSize = [[CCDirector sharedDirector] winSize];
+    UITouch* oneTouch = [touches anyObject];
+    UIView* touchView = [oneTouch view];
+    CGPoint location = [oneTouch locationInView:touchView];
+    CGPoint worldGLPoint = [[CCDirector sharedDirector] convertToGL:location];
+    CGPoint nodePoint = [self convertToNodeSpace:worldGLPoint];
+    for (CCSprite *sp in self.children) {
+        if (CGRectContainsPoint(sp.boundingBox, nodePoint) && sp.tag == BIRD_CHARACTER) {
+            CCScaleBy* birdButtonAction = [CCScaleBy actionWithDuration:0.3f scale:4.0f];
+            CCJumpTo* birdButtonAction1 = [CCJumpTo actionWithDuration:0.3f position:ccp(winSize.width / 2, sp.position.y + 50) height:0.2f jumps:1];
+            CCSpawn* allActions = [CCSpawn actions:birdButtonAction1,  birdButtonAction, nil];
+            [sp runAction:allActions];
+            for (CCSprite* sp in self.children) {
+                if (sp.tag == PIG_CHARACTER) {
+                     CCRotateTo* pigButtonAction = [CCRotateTo actionWithDuration:0.5f];
+                     CCJumpTo* pigButtonAction1 = [CCJumpTo actionWithDuration:0.3f position:ccp(winSize.width + 100, -50) height:0.2f jumps:1];
+                    CCSpawn* allActions = [CCSpawn actions:pigButtonAction, pigButtonAction1, nil];
+                    [sp runAction:allActions];
+                }
+                if (sp.tag == TITLE_TAG) {
+                    CCJumpTo* titleAction = [CCJumpTo actionWithDuration:0.3f position:ccp(winSize.width /2 , winSize.height + 100) height:0.2f jumps:1];
+                    [sp runAction:titleAction];
+                }
+            }
+        }
+        else if (CGRectContainsPoint(sp.boundingBox, nodePoint) && sp.tag == PIG_CHARACTER) {
+            
+            CCScaleBy* pigButtonAction = [CCScaleBy actionWithDuration:0.3f scale:4.0f];
+            CCJumpTo* pigButtonAction1 = [CCJumpTo actionWithDuration:0.3f position:ccp(winSize.width / 2, sp.position.y + 50) height:0.2f jumps:1];
+            CCSpawn* allActions = [CCSpawn actions:pigButtonAction1, pigButtonAction, nil];
+            [sp runAction:allActions];
+            for (CCSprite* sp in self.children) {
+                if (sp.tag == BIRD_CHARACTER) {
+                    CCRotateTo* birdButtonAction = [CCRotateTo actionWithDuration:0.5f];
+                    CCJumpTo* birdButtonAction1 = [CCJumpTo actionWithDuration:0.3f position:ccp(-30, -50) height:0.2f jumps:1];
+                    CCSpawn* allActions = [CCSpawn actions:birdButtonAction, birdButtonAction1, nil];
+                    [sp runAction:allActions];
+                }
+                if (sp.tag == TITLE_TAG) {
+                    CCJumpTo* titleAction = [CCJumpTo actionWithDuration:0.3f position:ccp(winSize.width /2 , winSize.height + 100) height:0.2f jumps:1];
+                    [sp runAction:titleAction];
+                }
+            }
+
+        }
+        
+    }
+    
+}
+
+
+
 //touches就是触摸点的集合
 - (void)ccTouchesEnded:(NSSet *)touches withEvent:(UIEvent *)event
 {
@@ -96,13 +146,21 @@
             [[CCDirector sharedDirector] replaceScene:trans];
             [trans release];
         }
-        else if (CGRectContainsPoint(oneSprite.boundingBox, nodePoint) && oneSprite.tag > 0 && oneSprite.tag < successlevel + 1) {
-            NSLog(@"选中了第 %d 关", i - 1);
+        else if (CGRectContainsPoint(oneSprite.boundingBox, nodePoint) && oneSprite.tag == BIRD_CHARACTER) {
             CCScene* sc = [GameScene sceneWithLevel:oneSprite.tag];
-            CCTransitionScene* trans = [[CCTransitionPageTurn alloc] initWithDuration:1.0f scene:sc];
+            CCTransitionScene* trans = [[CCTransitionPageTurn alloc] initWithDuration:2.0f scene:sc];
+            [[CCDirector sharedDirector] replaceScene:trans];
+            [trans release];
+        }
+        else if (CGRectContainsPoint(oneSprite.boundingBox, nodePoint) && oneSprite.tag == PIG_CHARACTER) {
+            CCScene* sc = [GameScene sceneWithLevel:oneSprite.tag];
+            CCTransitionScene* trans = [[CCTransitionPageTurn alloc] initWithDuration:2.0f scene:sc];
             [[CCDirector sharedDirector] replaceScene:trans];
             [trans release];
         }
     }
 }
+
+
+
 @end

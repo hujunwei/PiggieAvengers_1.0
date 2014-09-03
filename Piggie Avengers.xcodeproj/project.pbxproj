@@ -363,6 +363,7 @@
 		85B3BA86199DC7C200149172 /* coffeePig.png in Resources */ = {isa = PBXBuildFile; fileRef = 85B3BA85199DC7C100149172 /* coffeePig.png */; };
 		85B3BA89199DC99200149172 /* kingPig1.png in Resources */ = {isa = PBXBuildFile; fileRef = 85B3BA87199DC99200149172 /* kingPig1.png */; };
 		85B3BA8A199DC99200149172 /* pig1small.png in Resources */ = {isa = PBXBuildFile; fileRef = 85B3BA88199DC99200149172 /* pig1small.png */; };
+		85BCE21219B7C6ED001769A4 /* levelSceneTitle.png in Resources */ = {isa = PBXBuildFile; fileRef = 85BCE21119B7C6ED001769A4 /* levelSceneTitle.png */; };
 		85FB5C7D198DF1170084B8AD /* Egg.mm in Sources */ = {isa = PBXBuildFile; fileRef = 85FB5C7C198DF1170084B8AD /* Egg.mm */; };
 /* End PBXBuildFile section */
 
@@ -919,6 +920,7 @@
 		85B3BA85199DC7C100149172 /* coffeePig.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = coffeePig.png; sourceTree = "<group>"; };
 		85B3BA87199DC99200149172 /* kingPig1.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = kingPig1.png; sourceTree = "<group>"; };
 		85B3BA88199DC99200149172 /* pig1small.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = pig1small.png; sourceTree = "<group>"; };
+		85BCE21119B7C6ED001769A4 /* levelSceneTitle.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = levelSceneTitle.png; sourceTree = "<group>"; };
 		85FB5C7B198DF1170084B8AD /* Egg.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Egg.h; sourceTree = "<group>"; };
 		85FB5C7C198DF1170084B8AD /* Egg.mm */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.cpp.objcpp; path = Egg.mm; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -1102,6 +1104,7 @@
 		16DDE3FF195DD8BC00F5B89C /* Images */ = {
 			isa = PBXGroup;
 			children = (
+				85BCE21119B7C6ED001769A4 /* levelSceneTitle.png */,
 				8506997819A8D2C300079A3F /* shield.png */,
 				85897711199E44F8000FF295 /* congratulations1.png */,
 				8586723519A8B66A00E9E63C /* blowBigCool.png */,
@@ -1977,6 +1980,7 @@
 				8541FCED19A05D360058AD32 /* ice3d.png in Resources */,
 				16DDE5F1195DD8BD00F5B89C /* ice1.png in Resources */,
 				859D413E19A044CE0049F76C /* pig.png in Resources */,
+				85BCE21219B7C6ED001769A4 /* levelSceneTitle.png in Resources */,
 				85B3BA84199DA71C00149172 /* congratulations.png in Resources */,
 				16DDE637195DD8BD00F5B89C /* yumao1.png in Resources */,
 				8541FCE719A04D290058AD32 /* angrybirds3d.png in Resources */,

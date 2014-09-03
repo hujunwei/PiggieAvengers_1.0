@@ -50,10 +50,6 @@
         [self addChild:menu];
         //设置一个schedule调用小鸟
         [self schedule:@selector(tick:) interval:1.0f];
-        //加上雪花效果
-        /*
-        CCParticleSystem* snow = [[ParticleManager sharedParticleManager] particleWithType:ParticleTypeSnow];
-        [self addChild:snow];*/
     }
     return self;
 }

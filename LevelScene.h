@@ -11,6 +11,7 @@
 @interface LevelScene : CCLayer
 {
     int successlevel;
+    bool pigMode;
 }
 +(id) scene;
 
